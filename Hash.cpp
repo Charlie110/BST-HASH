@@ -19,37 +19,53 @@ int Hash::hash_func(const string& word){
 }
 bool Hash::search(const string& word){
 	int index=hash_func(word);
-	HNode*entry = hashtable[index];
-	while(entry!=NULL){
-		if(entry->word == word && entry->status==1){
+	while(hashtable[index]!=NULL){
+		if(hashtable[index]->word == word && hashtable[index]->count>0){
+			//cout<<"true in hash"<<endl;
+			//cout<<hashtable[index]->count;
 			return true;
 		}
+		index=(index+1)%size;
+
 	}
 
 	return false;
 }
 
-void Hash::insert(const string& word){
+void Hash::insert(string& word){
 	int index= hash_func(word);
-	HNode* entry = hashtable[index];
-	while(entry!=NULL){
-		if(entry->status==1 && entry->word == word){
-			entry->count++;
+	if(hashtable[index]==NULL){
+		hashtable[index]=new HNode();
+		hashtable[index]->word=word;
+                hashtable[index]->count=1;
+                hashtable[index]->status=1;
+                return;
+
+	}
+	while(hashtable[index]!=NULL){
+		if(hashtable[index]->status==1 && hashtable[index]->word == word){
+			hashtable[index]->count++;
 			return;
 		}
-		else if(entry->status==-1){
-			break;	
+		else if(hashtable[index]==NULL||hashtable[index]->status==-1){
+			if(hashtable[index]==NULL){
+				hashtable[index] = new HNode();
+				hashtable[index]->word=word;
+				hashtable[index]->count=1;
+				hashtable[index]->status=1;
+				return;
+			} 
+			else{
+				hashtable[index]->word = word;
+				hashtable[index]->count = 1;
+				hashtable[index]->status=1;
+				return;}
 		}
 		else{
-			entry=hashtable[index+1];
-		}
+			
+                        index=(index+1) % size;
+                }
 	}
-
-	if(entry == NULL){
-		entry = new HNode (word);
-		
-	}
-
 }
 void Hash::deleteHelp(HNode* node){
 	node->count=node->count - 1;

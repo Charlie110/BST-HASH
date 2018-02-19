@@ -2,7 +2,9 @@
 //Benson Chu
 #include "BST.h"
 #include "Hash.h"
+#include <string>
 #include <ctime>
+#include <algorithm>
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
@@ -10,9 +12,26 @@
 #include <experimental/filesystem>
 using namespace std;
 namespace fs = std::experimental::filesystem;
+bool find(const string& word, vector<string> str){
+	for(std::vector<string>::iterator it=str.begin(); it != str.end();it++){
+		if(*it == word){
+			return 1;
+		}
+	}
+return 0;
+}
+void replace(string& str, string const& find, string const& replace)
+{
+    for(string::size_type i = 0; (i = str.find(find, i)) != string::npos;)
+    {
+        str.replace(i, find.length(), replace);
+        i += replace.length();
+    }
+}
+
 int main(){
     vector<string> stopwords = {"i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"};
-    vector <string> store;
+    vector <string> temp;
     string str;
     for(auto& p: fs::recursive_directory_iterator("hotels-small")){
         if(is_regular_file(status(p))){
@@ -25,7 +44,7 @@ int main(){
                 istringstream stream(str);
                 string word;
                 while(stream >> word){
-                    unsigned int strCount = 0;
+                    unsigned int a = 0;
                     if(word.length() > 1){
                     	for(unsigned int i = 0; i < word.length(); i++){
                         	if(isalpha(word.at(i)) || (ispunct(word.at(i)) &&
@@ -33,12 +52,29 @@ int main(){
                             	word.at(i) == ',' ||
                             	word.at(i) == '.' ||
                             	word.at(i) == '-'))){
-                                	strCount++;
+                                	a++;
                         	}
                     	}
                     }
-                    if(strCount == word.length()){
-                        store.push_back(word);
+		transform(word.begin(), word.end(), word.begin(), ::tolower);
+	        replace(word,".","");
+                replace(word,",","");
+                replace(word,"!","");
+                replace(word,"(","");
+                replace(word,")","");
+                replace(word,"?","");
+                replace(word,"&","");
+                replace(word,";","");
+                replace(word,"*","");
+                replace(word,":","");
+                replace(word,"-","");
+
+
+	
+                if(a == word.length() && !find(word, stopwords)){
+			
+			temp.push_back(word);
+
                     }
                 }
             }
@@ -46,82 +82,83 @@ int main(){
         }
     }
 
-    //Begin construction of BST and HTable
-    BST testBST;
-    unsigned int x = store.size() * 3 / 2;
+    
+    BST BST_T;
+    unsigned int x = temp.size() * 3 / 2;
     string input = "";
-    Hash testHTable(x);
-    //Inserting each word into both BST and HTable
-    for(unsigned int i = 0; i < store.size(); i++){
-        testBST.insert(store[i]);
-        testHTable.insert(store[i]);
+    Hash h(x);
+    for(unsigned int i = 0; i < temp.size(); i++){
+        BST_T.insert(temp[i]);
+        h.insert(temp[i]);
 	
     }
+    //h.print();
     do{
         getline(cin, input);
-        stringstream store(input);
+        stringstream temp(input);
         int command = 0;
-        store >> command;
+        temp >> command;
         switch(command){
-            //perform search function
+    //search
     case 1: 
     {       
-	   // cout<<testHTable.getsize()<<"check size"<<endl;
+	    //h.print();
 	    string input = "";
             cin >> input;
             int start_b = clock();
-            testBST.search(input);
+            BST_T.search(input);
             int stop_b = clock();
             int start_h = clock();
-            testHTable.search(input);
+            h.search(input);
             int stop_h = clock();
-            if(testHTable.search(input) == testBST.search(input)){
-            	cout << boolalpha << testHTable.search(input) << endl;
+            if(h.search(input) == BST_T.search(input)){
+            	cout << boolalpha << h.search(input) << endl;
             	cout << "BST: " << (stop_b - start_b)/double(CLOCKS_PER_SEC) << "s" << endl;
             	cout << "Hash: " << (stop_h - start_h)/double(CLOCKS_PER_SEC) << "s" << endl;
             	cout << endl;
             }
-    }
+    
             break;
-            //perform insert function
+    }
+    //insert 
     case 2: 
     {       string input2;
             cin >> input2;
             int start2_b = clock();
-            testBST.insert(input2);
+            BST_T.insert(input2);
             int stop2_b = clock();
             int start2_h = clock();
-            testHTable.insert(input2);
+            h.insert(input2);
             int stop2_h = clock();
             cout << "BST: " << (stop2_b - start2_b)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << "Hash: " << (stop2_h - start2_h)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << endl;
             break;
     }
-            //perform delete function
+    //perform delete function
     case 3: 
     {       string input3 = "";
             cin >> input3;
             int start3_b = clock();
-            testBST.Delete(input3);
+            BST_T.Delete(input3);
             int stop3_b = clock();
             int start3_h = clock();
-            testHTable.hashdelete(input3);
+            h.hashdelete(input3);
             int stop3_h = clock();
             cout << "BST: " << (stop3_b - start3_b)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << "Hash: " << (stop3_h - start3_h)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << endl;
             break;
     }
-            //perform sort function, reads in file to be written to
+    //sort need a file name
     case 4: 
     {       string input4 = "";
             cin >> input4;
             int start4_b = clock();
-            testBST.sort(input4);
+            BST_T.sort(input4);
             int stop4_b = clock();
             int start4_h = clock();
-            testHTable.sort(input4);
+            h.sort(input4);
             int stop4_h = clock();
 
             cout << "BST: " << (stop4_b - start4_b)/double(CLOCKS_PER_SEC) << "s" << endl;
@@ -129,16 +166,16 @@ int main(){
             cout << endl;
             break;
     }
-            //perform range search function, requires 2 string inputs
+    //range search requires 2 string inputs
     case 5: 
-    {       string rangeMin = "", rangeMax = "";
-            cin >> rangeMin >> rangeMax;
+    {       string small = "", large = "";
+            cin >> small >> large;
             int start5_b = clock();
-            testBST.range(rangeMin, rangeMax);
+            BST_T.range(small, large);
             int stop5_b = clock();
             cout << endl;
             int start5_h = clock();
-            testHTable.range(rangeMin, rangeMax);
+            h.range(small, large);
             int stop5_h = clock();
 
             cout << "BST: " << (stop5_b - start5_b)/double(CLOCKS_PER_SEC) << "s" << endl;

@@ -6,21 +6,22 @@
 #include <vector>
 #include <fstream>
 using namespace std;
-struct HNode{
-	string word;
-	int count;
-	int status;
+class HNode{
+	public:
+		string word;
+		int count;
+		int status;
 
-	HNode(){
-		word="";
-		count=0;
-		status=1;
-	}
-	HNode(string name){
-		status=1;
-		word=name;
-		count=1;
-	}
+		HNode(){
+			word="";
+			count=0;
+			status=1;
+		}
+		HNode(string name){
+			status=1;
+			word=name;
+			count=1;
+		}
 	
 };
 
@@ -48,12 +49,22 @@ class Hash{
 
 		int hash_func(const string& word);
 		bool search(const string& word);
-		void insert(const string& word);
+		void insert(string& word);
 		void deleteHelp(HNode* node);
 		void hashdelete(const string& word);
 		void range(const string& word1, const string& word2);
 	
 		void sort(const string& path);
+		string print(){
+			for(int i=0; i<size; i++){
+				if(hashtable[i]==NULL){
+					cout<<"0"<<endl;
+				}
+			else{
+				cout<<hashtable[i]->word<<" "<<hashtable[i]->count<<endl; 
+			}
+		}
+		}
 };
 
 
