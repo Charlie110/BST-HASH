@@ -132,8 +132,12 @@ void BST::helpdelete(Node *n,const string& s){
   return;
 }
 
-void BST::sort(ofstream& out){
+void BST::sort(const string& path){
+  ofstream out;
+  out.open(path,fstream::app);
   helpsort(root,out);
+  out<<endl;
+  out.close();
 }
 
 void BST::helpsort(Node *n,ofstream& out){

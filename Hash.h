@@ -6,17 +6,17 @@
 #include <vector>
 #include <fstream>
 using namespace std;
-struct Node{
+struct HNode{
 	string word;
 	int count;
 	int status;
 
-	Node(){
+	HNode(){
 		word="";
 		count=0;
 		status=1;
 	}
-	Node(string name){
+	HNode(string name){
 		status=1;
 		word=name;
 		count=1;
@@ -26,12 +26,12 @@ struct Node{
 
 class Hash{
 	private:
-		Node **hashtable; 
+		HNode **hashtable; 
 		int size;
 	public:
 		Hash(){
 			size=10;
-			hashtable= new Node*[size];
+			hashtable= new HNode*[size];
 			for(int i=0; i<size;i++){
 				hashtable[i]=NULL;
 			}
@@ -49,7 +49,7 @@ class Hash{
 		int hash_func(const string& word);
 		bool search(const string& word);
 		void insert(const string& word);
-		void deleteHelp(Node* node);
+		void deleteHelp(HNode* node);
 		void hashdelete(const string& word);
 		void range(const string& word1, const string& word2);
 	

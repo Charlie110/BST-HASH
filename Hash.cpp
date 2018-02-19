@@ -2,7 +2,7 @@
 using namespace std;
 Hash::Hash(int n){
 	size=n;
-	hashtable= new Node*[size];
+	hashtable= new HNode*[size];
 	for(int i=0; i<size;i++){
 		hashtable[i]=NULL;
 	}
@@ -19,7 +19,7 @@ int Hash::hash_func(const string& word){
 }
 bool Hash::search(const string& word){
 	int index=hash_func(word);
-	Node*entry = hashtable[index];
+	HNode*entry = hashtable[index];
 	while(entry!=NULL){
 		if(entry->word == word && entry->status==1){
 			return true;
@@ -31,7 +31,7 @@ bool Hash::search(const string& word){
 
 void Hash::insert(const string& word){
 	int index= hash_func(word);
-	Node* entry = hashtable[index];
+	HNode* entry = hashtable[index];
 	while(entry!=NULL){
 		if(entry->status==1 && entry->word == word){
 			entry->count++;
@@ -46,12 +46,12 @@ void Hash::insert(const string& word){
 	}
 
 	if(entry == NULL){
-		entry = new Node (word);
+		entry = new HNode (word);
 		
 	}
 
 }
-void Hash::deleteHelp(Node* node){
+void Hash::deleteHelp(HNode* node){
 	node->count=node->count - 1;
 	if(node->count == 0){
 		node->status=-1;
@@ -60,7 +60,7 @@ void Hash::deleteHelp(Node* node){
 }
 void Hash::hashdelete(const string& word){
 	int index = hash_func(word);
-	Node* entry = hashtable[index];
+	HNode* entry = hashtable[index];
 	while(entry!=NULL){
 		if(entry->word == word){
 			if(entry->status == -1){

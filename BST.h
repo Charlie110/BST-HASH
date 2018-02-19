@@ -32,7 +32,7 @@ class BST{
   bool search(const string& s);
   void insert(const string& s);
   void Delete(const string& s);
-  void sort(ofstream& out);
+  void sort(const string& path);
   void range(const string& word1, const string& word2);
 
  private:
