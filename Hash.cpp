@@ -1,3 +1,4 @@
+//Fuheng Zhao, Runyu Gao
 #include "Hash.h" 
 using namespace std;
 Hash::Hash(int n){

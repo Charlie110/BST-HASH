@@ -1,5 +1,4 @@
-//File that reads input and compares the running times of BST and Hash Tables
-//Benson Chu
+//Fuheng Zhao , Runyu Gao
 #include "BST.h"
 #include "Hash.h"
 #include <string>
@@ -68,10 +67,27 @@ int main(){
                 replace(word,"*","");
                 replace(word,":","");
                 replace(word,"-","");
+                replace(word,"$","");
+                replace(word,"#","");
+                replace(word,"[","");
+                replace(word,"]","");
+                replace(word,"1","");
+                replace(word,"2","");
+                replace(word,"3","");
+                replace(word,"4","");
+                replace(word,"5","");
+                replace(word,"6","");
+                replace(word,"7","");
+                replace(word,"8","");
+                replace(word,"9","");
+                replace(word,"0","");
+		replace(word,"/","");
+                replace(word,"'","");
+                replace(word,"+","");
+                replace(word,"=","");
+                replace(word,"|","");
 
-
-	
-                if(a == word.length() && !find(word, stopwords)){
+		if(a == word.length() && !find(word, stopwords)){
 			
 			temp.push_back(word);
 
@@ -93,14 +109,13 @@ int main(){
 	
     }
     //h.print();
-    do{
+   while(true){
         getline(cin, input);
         stringstream temp(input);
         int command = 0;
         temp >> command;
-        switch(command){
     //search
-    case 1: 
+    if(command == 1) 
     {       
 	    //h.print();
 	    string input = "";
@@ -118,10 +133,10 @@ int main(){
             	cout << endl;
             }
     
-            break;
+            
     }
     //insert 
-    case 2: 
+    if(command == 2)
     {       string input2;
             cin >> input2;
             int start2_b = clock();
@@ -133,10 +148,10 @@ int main(){
             cout << "BST: " << (stop2_b - start2_b)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << "Hash: " << (stop2_h - start2_h)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << endl;
-            break;
+            
     }
     //perform delete function
-    case 3: 
+    if(command == 3) 
     {       string input3 = "";
             cin >> input3;
             int start3_b = clock();
@@ -148,10 +163,10 @@ int main(){
             cout << "BST: " << (stop3_b - start3_b)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << "Hash: " << (stop3_h - start3_h)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << endl;
-            break;
+            
     }
     //sort need a file name
-    case 4: 
+    if(command ==4)  
     {       string input4 = "";
             cin >> input4;
             int start4_b = clock();
@@ -164,10 +179,10 @@ int main(){
             cout << "BST: " << (stop4_b - start4_b)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << "Hash: " << (stop4_h - start4_h)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << endl;
-            break;
+            
     }
     //range search requires 2 string inputs
-    case 5: 
+    if(command ==5) 
     {       string small = "", large = "";
             cin >> small >> large;
             int start5_b = clock();
@@ -181,10 +196,10 @@ int main(){
             cout << "BST: " << (stop5_b - start5_b)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << "Hash: " << (stop5_h - start5_h)/double(CLOCKS_PER_SEC) << "s" << endl;
             cout << endl;
-            break;
+            
     }
-        }
+        
     }
-    while(true);
+   
     
 }

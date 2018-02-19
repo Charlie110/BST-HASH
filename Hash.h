@@ -1,3 +1,4 @@
+//Fuheng Zhao Runyu Gao
 #ifndef HASH_H
 #define HASH_H
 #include <algorithm>
